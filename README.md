@@ -27,9 +27,9 @@ Project Kelp operates through five sequential modules:
 
 ---
 
-### 2. Strategic Analysis (Gemini 2.5 / Pro)
+### 2. Strategic Analysis (Gemini 2.5 / Flash)
 
-- Ingests raw scraped data into **Google Gemini**.
+- Ingests raw scraped data into **Google Gemini Agent Development Kit**.
 - Produces a structured JSON report covering:
   - Investment Thesis
   - Strategic Assessment
@@ -41,7 +41,7 @@ Project Kelp operates through five sequential modules:
 
 ### 3. Visualization Processing (Groq)
 
-- Parses narrative trend descriptions using **Groq** (LLaMA / GPT-OSS).
+- Parses narrative trend descriptions using **Groq** (LLaMA / GPT-OSS 120B parameter model).
 - Converts text-based insights into structured JSON objects for:
   - Line charts
   - Bar charts
