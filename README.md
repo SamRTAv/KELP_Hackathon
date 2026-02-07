@@ -1,152 +1,119 @@
-Project Kelp: Automated Equity Research & Presentation Generator
-Overview
-Project Kelp is an end-to-end automated pipeline designed to generate professional investment memos and PowerPoint teaser decks for private equity and venture capital analysis. The system accepts a target company name and executes a multi-stage workflow involving deep web research, financial data extraction, strategic analysis using Large Language Models (LLMs), AI image generation, and programmatic slide creation.
+# Project Kelp  
+**Automated Equity Research & Presentation Generator**
 
-System Architecture
-The project operates through five distinct modules, processed sequentially:
+## Overview
 
-Data Aggregation (Smart Search):
+Project Kelp is an end-to-end automated pipeline designed to generate professional investment memos and PowerPoint teaser decks for private equity and venture capital analysis.
 
-Utilizes Perplexity API to identify high-quality, diverse sources (official documentation, news, industry reports).
+The system accepts a target company name and executes a multi-stage workflow involving deep web research, financial data extraction, strategic analysis using Large Language Models (LLMs), AI image generation, and programmatic slide creation.
 
-Uses Firecrawl to scrape web content and pypdf to extract text from PDF reports.
+The final output is a structured research report and a fully editable, branded PowerPoint (.pptx) teaser deck suitable for investor presentations.
 
-Logs citations to Google Sheets or CSV for audit trails.
+---
 
-Strategic Analysis (Gemini 2.5/Pro):
+## System Architecture
 
-Ingests raw scraped data into Google's Gemini model.
+Project Kelp operates through five sequential modules:
 
-Produces a structured JSON report covering Investment Thesis, Strategic Assessment, Financial Health, and Sector-Specific Metrics (SaaS, Manufacturing, D2C, etc.).
+### 1. Data Aggregation (Smart Search)
 
-Identifies narrative trends suitable for visualization.
+- Uses **Perplexity API** to identify high-quality, diverse information sources such as:
+  - Official company documentation
+  - News articles
+  - Industry and market reports
+- Uses **Firecrawl** to scrape web pages and convert them into clean markdown.
+- Uses **pypdf** to extract text from PDF reports.
+- Logs all citations and sources to **Google Sheets or CSV** for auditability and traceability.
 
-Visualization Processing (Groq):
+---
 
-Parses narrative trend descriptions using Groq (LLaMA/GPT-oss).
+### 2. Strategic Analysis (Gemini 2.5 / Pro)
 
-Converts textual descriptions into structured JSON objects for specific chart types (Line Charts, Bar Charts, KPI Cards).
+- Ingests raw scraped data into **Google Gemini**.
+- Produces a structured JSON report covering:
+  - Investment Thesis
+  - Strategic Assessment
+  - Financial Health
+  - Sector-specific metrics (SaaS, Manufacturing, D2C, etc.)
+- Identifies narrative insights suitable for visualization and charting.
 
-Asset Generation (Stable Diffusion):
+---
 
-Detects the industry sector (e.g., Pharma, Logistics, SaaS).
+### 3. Visualization Processing (Groq)
 
-Uses HuggingFace Inference Client (Stable Diffusion XL) to generate photorealistic, sector-appropriate stock imagery for the presentation.
+- Parses narrative trend descriptions using **Groq** (LLaMA / GPT-OSS).
+- Converts text-based insights into structured JSON objects for:
+  - Line charts
+  - Bar charts
+  - KPI cards
+- Ensures chart data is presentation-ready and machine-readable.
 
-Presentation Assembly (python-pptx):
+---
 
-Compiles all analyzed text, calculated financial metrics, dynamic charts, and generated images.
+### 4. Asset Generation (Stable Diffusion)
 
-Renders a branded, edit-ready PowerPoint (.pptx) file with a dedicated design system (colors, fonts, layouts).
+- Automatically detects the company’s industry sector (e.g., Pharma, Logistics, SaaS).
+- Uses **HuggingFace Inference Client** with **Stable Diffusion XL** to generate:
+  - Photorealistic
+  - Sector-appropriate
+  - Investor-grade visual assets
+- Images are saved locally and later embedded into slides.
 
-Prerequisites
-To run this project, the following dependencies and API keys are required.
+---
 
-Python Libraries
+### 5. Presentation Assembly (python-pptx)
+
+- Uses **python-pptx** to assemble:
+  - Strategic text
+  - Financial metrics
+  - Native PowerPoint charts
+  - AI-generated images
+- Outputs a fully branded, editable PowerPoint deck with:
+  - Defined color palette
+  - Font styles
+  - Slide layouts and spacing rules
+
+---
+
+## Prerequisites
+
+### Python Libraries
+
 Ensure the following Python packages are installed:
 
-requests
+- requests  
+- pandas  
+- pypdf  
+- gspread  
+- oauth2client  
+- google-generativeai  
+- groq  
+- huggingface_hub  
+- python-pptx  
+- pydantic  
 
-pandas
+---
 
-pypdf
+### API Keys & Credentials
 
-gspread
-
-oauth2client
-
-google-generativeai
-
-groq
-
-huggingface_hub
-
-python-pptx
-
-pydantic
-
-API Keys & Credentials
 You must obtain valid API keys for the following services and replace the placeholders in the scripts:
 
-Perplexity AI: For source discovery.
+- **Perplexity AI** – Source discovery
+- **Firecrawl** – Web scraping and markdown conversion
+- **Google Gemini (GenAI)** – Core reasoning and report generation
+- **Groq** – Fast JSON structuring for chart data
+- **HuggingFace** – Image generation (Stable Diffusion XL)
 
-Firecrawl: For web scraping and markdown conversion.
+Optional:
+- **Google Service Account** – Required for Google Sheets logging  
+  Place the `google_creds.json` file in the project root.
 
-Google Gemini (GenAI): For core reasoning and report generation.
+---
 
-Groq: For rapid JSON formatting of chart data.
+## Installation
 
-HuggingFace: For image generation (Stable Diffusion).
+Clone the repository:
 
-Google Service Account (Optional): A google_creds.json file is required if using the Google Sheets logging feature.
-
-Installation
-Clone the repository to your local machine.
-
-Install the dependencies using pip:
-
-Bash
-pip install requests pandas pypdf gspread oauth2client google-generativeai groq huggingface_hub python-pptx pydantic
-Place your google_creds.json file in the root directory (if using Google Sheets).
-
-Configuration
-Open the main script files and update the configuration sections:
-
-Target Company: Update the company variable (e.g., company = "KSolves").
-
-API Keys: Replace placeholders (e.g., "YOUR API KEY") with your actual credentials.
-
-Model Selection: The scripts are configured to use specific models (e.g., gemini-2.5-flash, stabilityai/stable-diffusion-xl-base-1.0). Modify these variables if you wish to use different model versions.
-
-Usage
-The pipeline is designed to be run sequentially.
-
-1. Data Collection
-Executes search and scraping.
-
-Input: Company Name.
-
-Output: input_data{company}.json (Raw text) and Ksolves-OnePager.md.
-
-2. Analysis & Structuring
-Passes raw data to Gemini to create the core report.
-
-Input: input_data{company}.json or Markdown file.
-
-Output: layer2_withplot{company}.json (Structured analysis including plot descriptions).
-
-3. Chart Data Extraction
-Refines plot descriptions into chart-ready data.
-
-Input: layer2_withplot{company}.json.
-
-Output: Updates layer2_withplot{company}.json with a zplotting key containing chart datasets.
-
-4. Image Generation
-Generates visual assets.
-
-Input: Sector definition from the JSON report.
-
-Output: Saved .jpg files in the sector_visuals/ directory.
-
-5. Presentation Generation
-Builds the final slide deck.
-
-Input: Fully processed JSON and generated images.
-
-Output: Kelp_Auto_Teaser{company}.pptx.
-
-Output Artifacts
-CSV/Google Sheet: A log of all URLs and snippets used for the research.
-
-JSON Report: A deep strategic analysis object containing all financial data and qualitative reasoning.
-
-Sector Images: A folder of AI-generated images specific to the company's industry.
-
-PowerPoint Deck: A 3-slide teaser deck including:
-
-Slide 1: Business Profile & Strategic Overview.
-
-Slide 2: Financial Performance (with native Excel-backed charts and KPI cards).
-
-Slide 3: Investment Highlights (Grid layout).
+```bash
+git clone <repository-url>
+cd project-kelp
