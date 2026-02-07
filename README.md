@@ -115,5 +115,5 @@ Optional:
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone (https://github.com/SamRTAv/KELP_Hackathon)
 cd project-kelp
